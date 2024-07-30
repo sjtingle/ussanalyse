@@ -1,6 +1,6 @@
-MIT License
+# MIT License
 
-Copyright (c) SJ Tingle 2024
+Copyright (c) 2024 ussanalyse authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
