@@ -42,8 +42,6 @@
 #'
 #'
 
-
-
 cineloop_analyse <- function(data,
                              timevar,
                              intensityvar,
