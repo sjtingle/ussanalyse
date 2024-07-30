@@ -40,7 +40,7 @@ return a plot of the smoothed curve.
 This function plots and analyzes time-intensity data, such as data from (contrast-enhanced)
 ultrasound cineloops. Peak intensity and time to peak intensity are calculated from a smoothed
 curve through the data (loess smoother). Area under the curve is calculated from the raw data.
-Time to peak proportion (for example time to 90% of peak) can also be calculated.
+Time to peak proportion (for example time to 90 percent of peak) can also be calculated.
 }
 \details{
 A plot of the data is generated and a dataframe with the results is returned.
@@ -51,10 +51,12 @@ A plot of the data is generated and a dataframe with the results is returned.
 
 # Generating simulated data
 set.seed(123)
-random_vals <- sample(1:10, nrow(example_data), replace = TRUE)
 example_data <- data.frame(time = seq(0, 82, by = 0.25))
-example_data$regionA_intensity <- log(example_data$time + 1) * 50 - example_data$time * 2 + random_vals
-example_data$regionB_intensity <- log(example_data$time + 7, base = 10) * 80 - example_data$time * 1.5 + random_vals
+random_vals <- sample(1:10, nrow(example_data), replace = TRUE)
+example_data$regionA_intensity <- log(example_data$time + 1) * 50 -
+  example_data$time * 2 + random_vals
+example_data$regionB_intensity <- log(example_data$time + 7, base = 10) *
+  80 - example_data$time * 1.5 + random_vals
 
 # Example with defaults:
 
