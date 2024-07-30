@@ -65,4 +65,5 @@ cineloop_analyse(data = example_data, timevar = "time", intensityvar = "regionA_
 cineloop_analyse(data = example_data, timevar = "time", intensityvar = "regionA_intensity",
                   loess.span = 0.1, AUCmax = 30, peakproportion = 0.9, plotresult = TRUE)
 
+
 }
