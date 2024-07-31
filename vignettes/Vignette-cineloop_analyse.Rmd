@@ -1,0 +1,130 @@
+---
+title: "Vignette-cineloop_analyse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette-cineloop_analyse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ussanalyse)
+```
+
+## Using cineloop_analyse to analyse time-intensity data
+
+Using the cineloop_analyse requires a dataframe with a column indicating time values
+and at least one column with intensity values. Passing only the dataframe and name of these
+two columns will generate an intensity-time plot and return a dataframe with peak 
+intensity, time to peak and area under the curve (AUC). This analysis is performed by fitting
+a LOESS curve to the raw data, using the loess() function. AUC is calculated using the
+trapezium method for integration.
+
+Generated plots display the raw data as black dots, loess curve in red, with blue
+dashed lines showing calculated peak intensity and time to peak.
+
+```{r}
+
+# Simulating example data
+set.seed(123)
+example_data <- data.frame(time = seq(0, 82, by = 0.25))
+random_vals <- sample(1:10, nrow(example_data), replace = TRUE)
+example_data$regionA_intensity <- log(example_data$time + 1) * 50 -
+  example_data$time * 2 + random_vals
+example_data$regionB_intensity <- log(example_data$time + 7, base = 10) *
+  80 - example_data$time * 1.5 + random_vals
+
+# Showing dataframe structure
+
+head(example_data,5)
+
+```
+
+```{r}
+
+# Analysing using defaults
+
+result <- cineloop_analyse(example_data,"time","regionA_intensity")
+
+print(result)
+
+```
+
+### Time to peak proportion and adjusting area under the curve analysis
+
+Time to peak proportion (for example time to 90 percent of peak) can be calculated
+using the peakproportion argument. This will be added to the plot as a dashed green
+line.
+
+For area under the curve analysis a maximum time can be specified, for example AUC up
+to 10 seconds.
+
+```{r}
+result <- cineloop_analyse(example_data,"time","regionA_intensity",
+                           peakproportion = 0.9, #to calculate time to 90 percent peak
+                           AUCmax = 30)
+
+print(result)
+```
+
+### Adjusting the LOESS curve
+
+The loess.span argument can be adjusted to a number between 0 and 1, with larger
+values representing a greater degree of smoothing. In addition, any argument which can
+be passed into the loess() function can be passed into cineloop_analyse().
+
+```{r}
+
+result <- cineloop_analyse(example_data,"time","regionA_intensity",
+                           loess.span = 0.5, # altering from default of 0.1
+                           degree = 1) # adding a loess() argument
+
+print(result)
+
+```
+
+### Analysing multiple regions
+
+For loops can be used to analyse multiple regions and output a single result dataframe.
+
+```{r}
+results <- data.frame() #making empty dataframe to hold results
+
+for(region in c("regionA_intensity","regionB_intensity")){
+  resulttemp <- cineloop_analyse(example_data,"time",region) #storing results
+  resulttemp$Region <- region # adding column for region
+  results <- rbind(results, resulttemp) # combining results for different regions
+}
+
+print(results)
+
+```
+
+### Analysing multiple dataframes
+
+For loops can be used to analyse multiple dataframes and output a single result dataframe.
+
+```{r}
+
+example_data2 <- example_data #creating a second dataframe
+
+results <- data.frame() #making empty dataframe to hold results
+
+for(df in c("example_data","example_data2")){
+  resulttemp <- cineloop_analyse(get(df), # get() to get the dataframe object
+                                 "time","regionA_intensity") 
+  
+  resulttemp$data <- df # adding column for which dataframe results are from
+  results <- rbind(results, resulttemp) # combining results for different dataframes
+}
+
+print(results)
+
+```

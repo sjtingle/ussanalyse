@@ -39,8 +39,9 @@ return a plot of the smoothed curve.
 \description{
 This function plots and analyzes time-intensity data, such as data from (contrast-enhanced)
 ultrasound cineloops. Peak intensity and time to peak intensity are calculated from a smoothed
-curve through the data (loess smoother). Area under the curve is calculated from the raw data.
-Time to peak proportion (for example time to 90 percent of peak) can also be calculated.
+curve through the data (loess smoother). Area under the curve is calculated from the raw data
+using the trapezium method for integration. Time to peak proportion (for example time to
+90 percent of peak) can also be calculated.
 }
 \details{
 A plot of the data is generated and a dataframe with the results is returned.
